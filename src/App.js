@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useEffect, useState } from "react";
+import BeerCard from "./components/BeerCard";
 
 function App() {
+  const [beers, setBeers] = useState([]);
+  //you can add more things here!
+  useEffect(() => {
+    fetch("https://api.punkapi.com/v2/beers")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setBeers(data);
+      });
+  }, []);
+  //console.log("tell me what the heck I'm doing", this.state.beers)
+
+  if (beers.length < 1) {
+    return <h1>LOADING...</h1>;
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {beers.map((beer) => {
+        return (
+          <BeerCard beer={beer}  />
+        );
+      })}
     </div>
   );
 }
